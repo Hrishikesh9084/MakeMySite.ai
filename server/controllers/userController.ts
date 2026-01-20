@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import prisma from "../lib/prisma";
-import openai from "../configs/openai";
+import prisma from "../lib/prisma.js";
+import openai from "../configs/openai.js";
 import Stripe from "stripe";
 
 // Get User Credits
