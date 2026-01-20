@@ -12,9 +12,7 @@ const app = express();
 const port = 3000;
 
 const corsOptions = {
-    origin: process.env.TRUSTED_ORIGINS?.split(',')?.filter(Boolean)?.length
-        ? process.env.TRUSTED_ORIGINS.split(',')
-        : ['https://make-my-site-ai.vercel.app'],
+    origin: process.env.TRUSTED_ORIGINS,
     credentials: true,
 };
 
