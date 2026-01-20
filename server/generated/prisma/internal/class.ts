@@ -8,7 +8,7 @@
  *
  * 🛑 Under no circumstances should you import this file directly! 🛑
  *
- * Please import the `PrismaClient` class from the `client.ts` file instead.
+ * Please import the `PrismaClient` class from the `client.js` file instead.
  */
 
 import * as runtime from "@prisma/client/runtime/client"

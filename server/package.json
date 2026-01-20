@@ -2,11 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "tsx server.ts",
-    "server": "nodemon --exec tsx server.ts",
+    "start": "tsx server.js",
+    "server": "nodemon --exec tsx server.js",
     "build": "tsc"
   },
   "keywords": [],

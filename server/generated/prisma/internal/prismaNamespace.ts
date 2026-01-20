@@ -8,7 +8,7 @@
  *
  * 🛑 Under no circumstances should you import this file directly! 🛑
  *
- * All exports from this file are wrapped under a `Prisma` namespace object in the client.ts file.
+ * All exports from this file are wrapped under a `Prisma` namespace object in the client.js file.
  * While this enables partial backward compatibility, it is not part of the stable public API.
  *
  * If you are looking for your Models, Enums, and Input Types, please import them from the respective

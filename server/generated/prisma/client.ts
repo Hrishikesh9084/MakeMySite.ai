@@ -5,7 +5,7 @@
 // @ts-nocheck 
 /*
  * This file should be your main import to use Prisma. Through it you get access to all the models, enums, and input types.
- * If you're looking for something you can import in the client-side of your application, please refer to the `browser.ts` file instead.
+ * If you're looking for something you can import in the client-side of your application, please refer to the `browser.js` file instead.
  *
  * 🟢 You can import this file directly.
  */
