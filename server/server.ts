@@ -18,6 +18,8 @@ const corsOptions = {
     credentials: true,
 };
 
+
+
 app.use(cors(corsOptions));
 
 // Mount Better Auth routes (Express wildcard)
@@ -31,6 +33,11 @@ app.use(express.json({ limit: '50mb' }));
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Server is Live!');
+});
+
+app.use((req, res, next) => {
+  res.setHeader("Cache-Control", "no-store");
+  next();
 });
 
 app.use('/api/user', userRouter);
