@@ -2,8 +2,8 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "type": "commonjs",
+  "main": "server.ts",
+  "type": "module",
   "scripts": {
     "start": "tsx server.ts",
     "server": "nodemon --exec tsx server.ts",

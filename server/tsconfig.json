@@ -11,7 +11,7 @@
         "forceConsistentCasingInFileNames": true
     },
     "include": [
-        "./**/*.ts"
+        "src/**/*.ts"
 , "controllers/projectController.ts"    ],
     "exclude": [
         "node_modules"
