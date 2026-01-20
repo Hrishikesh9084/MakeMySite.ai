@@ -248,7 +248,7 @@ export const getUserProject = async (req: Request, res: Response) => {
             }
         })
 
-        res.json({ project });
+       return res.json({ project });
     } catch (error: any) {
         console.log(error.code || error.message);
         res.status(500).json({ message: 'Internal Server Error' });
