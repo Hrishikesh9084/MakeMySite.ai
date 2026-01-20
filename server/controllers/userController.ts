@@ -74,7 +74,7 @@ export const createUserProject = async (req: Request, res: Response) => {
             data: { credits: { decrement: 5 } }
         })
 
-        res.json({ projectId: project.id });
+        return res.json({ projectId: project.id });
 
         // Enhance user prompt
 
