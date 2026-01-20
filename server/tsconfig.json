@@ -1,19 +1,17 @@
 {
-    "compilerOptions": {
-        "target": "ES2020",
-        "module": "nodenext",
-        "moduleResolution":"nodenext",
-        "outDir": "./dist",
-        "rootDir": "./",
-        "strict": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
-    },
-    "include": [
-        "src/**/*.ts"
-, "controllers/projectController.ts"    ],
-    "exclude": [
-        "node_modules"
-    ]
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

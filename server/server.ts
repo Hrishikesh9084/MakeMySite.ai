@@ -2,10 +2,10 @@ import express, { Request, Response } from 'express';
 import 'dotenv/config';
 import cors from 'cors';
 import { toNodeHandler } from 'better-auth/node';
-import { auth } from './lib/auth';
-import userRouter from './routes/userRoutes';
-import projectRouter from './routes/projectRoute';
-import { stripWebhook } from './controllers/stripWebhook';
+import { auth } from './lib/auth.js';
+import userRouter from './routes/userRoutes.js';
+import projectRouter from './routes/projectRoute.js';
+import { stripWebhook } from './controllers/stripWebhook.js';
 
 const app = express();
 
