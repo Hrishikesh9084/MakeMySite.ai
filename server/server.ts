@@ -19,7 +19,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.post('/api/stripe', express.raw({type: 'application/json'}), stripWebhook);
 
 // Mount Better Auth routes (Express wildcard)
 app.all("/api/auth/{*any}", toNodeHandler(auth));
@@ -36,6 +35,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api/user', userRouter);
 app.use('/api/project', projectRouter);
+app.post('/api/stripe', express.raw({type: 'application/json'}), stripWebhook);
 
 
 app.listen(port, () => {

@@ -16,7 +16,7 @@ export const auth = betterAuth({
     deleteUser: {enabled: true}
   },
   trustedOrigins,
-  baseURL: process.env.BETTER_AUTH_URL! || "http://localhost:3000",
+  baseURL: process.env.BETTER_AUTH_URL! || "https://make-my-site-ai-backend.vercel.app/",
   secret: process.env.BETTER_AUTH_SECRET!,
   advanced:{
     cookies:{
@@ -25,7 +25,7 @@ export const auth = betterAuth({
             attributes:{
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+                sameSite: "none",
                 path: '/',
             }
         }
