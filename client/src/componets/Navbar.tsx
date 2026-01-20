@@ -32,8 +32,9 @@ const Navbar = () => {
   return (
     <>
       <nav className="sticky top-0 z-50 flex items-center justify-between w-full py-4 px-4 md:px-16 lg:px-24 xl:px-32 backdrop-blur border-b text-white border-slate-800">
-        <Link to="/">
-          <h1 className='flex p-2 text-xl sm:text-3xl sm:p-2'><img className='h-10' src={assets.logoCropped} alt="" /><span className='px-2'>MakeMySite.ai</span></h1>
+        <Link to="/" className='flex items-start justify-around'>
+          <img className='h-14 sm:flex sm:text-3xl' src={assets.logoCropped} alt="" />
+          <h1 className='sm:flex hidden sm:text-3xl sm:p-2'><span className='px-2'>MakeMySite.ai</span></h1>
         </Link>
 
         <div className="hidden md:flex items-center gap-8 transition duration-500 ">
