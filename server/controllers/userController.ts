@@ -25,273 +25,205 @@ export const getUserCredits = async (req: Request, res: Response) => {
 
 // Controller function to create New project
 
-// export const createUserProject = async (req: Request, res: Response) => {
-//     const userId = req.userId;
-//     try {
-//         const { initial_prompt } = req.body;
+export const createUserProject = async (req: Request, res: Response) => {
+    const userId = req.userId;
+    try {
+        const { initial_prompt } = req.body;
 
-//         if (!userId) {
-//             return res.status(401).json({ message: 'Unauthorized user' });
-//         }
+        if (!userId) {
+            return res.status(401).json({ message: 'Unauthorized user' });
+        }
 
-//         const user = await prisma.user.findUnique({
-//             where: {
-//                 id: userId
-//             }
-//         })
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId
+            }
+        })
 
-//         if (user && user.credits < 5) {
-//             return res.status(403).json({ message: 'Insufficient credits' });
-//         }
+        if (user && user.credits < 5) {
+            return res.status(403).json({ message: 'Insufficient credits' });
+        }
 
-//         // Create a new project
+        // Create a new project
 
-//         const project = await prisma.websiteProject.create({
-//             data: {
-//                 name: initial_prompt.length > 50 ? initial_prompt.substring(0, 47) + '...' : initial_prompt,
-//                 initial_prompt,
-//                 userId
-//             }
-//         })
+        const project = await prisma.websiteProject.create({
+            data: {
+                name: initial_prompt.length > 50 ? initial_prompt.substring(0, 47) + '...' : initial_prompt,
+                initial_prompt,
+                userId
+            }
+        })
 
-//         // Update User total creations
+        // Update User total creations
 
-//         await prisma.user.update({
-//             where: { id: userId },
-//             data: { totalCreation: { increment: 1 } },
-//         })
+        await prisma.user.update({
+            where: { id: userId },
+            data: { totalCreation: { increment: 1 } },
+        })
 
-//         await prisma.conversation.create({
-//             data: {
-//                 role: 'user',
-//                 content: initial_prompt,
-//                 projectId: project.id
-//             }
-//         })
+        await prisma.conversation.create({
+            data: {
+                role: 'user',
+                content: initial_prompt,
+                projectId: project.id
+            }
+        })
 
-//         await prisma.user.update({
-//             where: { id: userId },
-//             data: { credits: { decrement: 5 } }
-//         })
+        await prisma.user.update({
+            where: { id: userId },
+            data: { credits: { decrement: 5 } }
+        })
 
-//         return res.json({ projectId: project.id });
+        return res.json({ projectId: project.id });
 
-//         // Enhance user prompt
+        // Enhance user prompt
 
-//         const promptEnhanceResponse = await openai.chat.completions.create({
-//             model: 'mistralai/devstral-2512:free',
-//             messages: [
-//                 {
-//                     role: 'system',
-//                     content: `You are a prompt enhancement specialist. Take the user's website request and expand it into a detailed, comprehensive prompt that will help create the best possible website.
+        const promptEnhanceResponse = await openai.chat.completions.create({
+            model: 'mistralai/devstral-2512:free',
+            messages: [
+                {
+                    role: 'system',
+                    content: `You are a prompt enhancement specialist. Take the user's website request and expand it into a detailed, comprehensive prompt that will help create the best possible website.
 
-//                     Enhance this prompt by:
-//                     1. Adding specific design details (layout, color scheme, typography)
-//                     2. Specifying key sections and features
-//                     3. Describing the user experience and interactions
-//                     4. Including modern web design best practices
-//                     5. Mentioning responsive design requirements
-//                     6. Adding any missing but important elements
+                    Enhance this prompt by:
+                    1. Adding specific design details (layout, color scheme, typography)
+                    2. Specifying key sections and features
+                    3. Describing the user experience and interactions
+                    4. Including modern web design best practices
+                    5. Mentioning responsive design requirements
+                    6. Adding any missing but important elements
 
-//                     Return ONLY the enhanced prompt, nothing else. Make it detailed but concise (2-3 paragraphs max).`
-//                 },
-//                 {
-//                     role: 'user',
-//                     content: initial_prompt
-//                 }
+                    Return ONLY the enhanced prompt, nothing else. Make it detailed but concise (2-3 paragraphs max).`
+                },
+                {
+                    role: 'user',
+                    content: initial_prompt
+                }
 
-//             ]
-//         })
+            ]
+        })
 
 
 
-//         const enhancedPrompt = promptEnhanceResponse.choices[0].message.content;
+        const enhancedPrompt = promptEnhanceResponse.choices[0].message.content;
 
-//         await prisma.conversation.create({
-//             data: {
-//                 role: 'assistant',
-//                 content: `I 've enhanced your prompt to help create a better website:\n\n${enhancedPrompt}`,
-//                 projectId: project.id
-//             }
-//         })
+        await prisma.conversation.create({
+            data: {
+                role: 'assistant',
+                content: `I 've enhanced your prompt to help create a better website:\n\n${enhancedPrompt}`,
+                projectId: project.id
+            }
+        })
 
-//         await prisma.conversation.create({
-//             data: {
-//                 role: 'assistant',
-//                 content: 'Now generating your website...',
-//                 projectId: project.id
-//             }
-//         })
+        await prisma.conversation.create({
+            data: {
+                role: 'assistant',
+                content: 'Now generating your website...',
+                projectId: project.id
+            }
+        })
 
-//         // Generate Website code 
+        // Generate Website code 
 
-//         const codeGenerationResponse = await openai.chat.completions.create({
-//             model: 'mistralai/devstral-2512:free',
-//             messages: [
-//                 {
-//                     role: 'system',
-//                     content: `You are an expert web developer. Create a complete, production-ready, single-page website based on this request: "${enhancedPrompt}"
+        const codeGenerationResponse = await openai.chat.completions.create({
+            model: 'mistralai/devstral-2512:free',
+            messages: [
+                {
+                    role: 'system',
+                    content: `You are an expert web developer. Create a complete, production-ready, single-page website based on this request: "${enhancedPrompt}"
 
-//                     CRITICAL REQUIREMENTS:
-//                     - You MUST output valid HTML ONLY. 
-//                     - Use Tailwind CSS for ALL styling
-//                     - Include this EXACT script in the <head>: <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-//                     - Use Tailwind utility classes extensively for styling, animations, and responsiveness
-//                     - Make it fully functional and interactive with JavaScript in <script> tag before closing </body>
-//                     - Use modern, beautiful design with great UX using Tailwind classes
-//                     - Make it responsive using Tailwind responsive classes (sm:, md:, lg:, xl:)
-//                     - Use Tailwind animations and transitions (animate-*, transition-*)
-//                     - Include all necessary meta tags
-//                     - Use Google Fonts CDN if needed for custom fonts
-//                     - Use placeholder images from https://placehold.co/600x400
-//                     - Use Tailwind gradient classes for beautiful backgrounds
-//                     - Make sure all buttons, cards, and components use Tailwind styling
+                    CRITICAL REQUIREMENTS:
+                    - You MUST output valid HTML ONLY. 
+                    - Use Tailwind CSS for ALL styling
+                    - Include this EXACT script in the <head>: <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+                    - Use Tailwind utility classes extensively for styling, animations, and responsiveness
+                    - Make it fully functional and interactive with JavaScript in <script> tag before closing </body>
+                    - Use modern, beautiful design with great UX using Tailwind classes
+                    - Make it responsive using Tailwind responsive classes (sm:, md:, lg:, xl:)
+                    - Use Tailwind animations and transitions (animate-*, transition-*)
+                    - Include all necessary meta tags
+                    - Use Google Fonts CDN if needed for custom fonts
+                    - Use placeholder images from https://placehold.co/600x400
+                    - Use Tailwind gradient classes for beautiful backgrounds
+                    - Make sure all buttons, cards, and components use Tailwind styling
 
-//                     CRITICAL HARD RULES:
-//                     1. You MUST put ALL output ONLY into message.content.
-//                     2. You MUST NOT place anything in "reasoning", "analysis", "reasoning_details", or any hidden fields.
-//                     3. You MUST NOT include internal thoughts, explanations, analysis, comments, or markdown.
-//                     4. Do NOT include markdown, explanations, notes, or code fences.
+                    CRITICAL HARD RULES:
+                    1. You MUST put ALL output ONLY into message.content.
+                    2. You MUST NOT place anything in "reasoning", "analysis", "reasoning_details", or any hidden fields.
+                    3. You MUST NOT include internal thoughts, explanations, analysis, comments, or markdown.
+                    4. Do NOT include markdown, explanations, notes, or code fences.
 
-//                     The HTML should be complete and ready to render as-is with Tailwind CSS.`
-//                 },
-//                 {
-//                     role: 'user',
-//                     content: enhancedPrompt || ''
-//                 }
-//             ]
-//         })
+                    The HTML should be complete and ready to render as-is with Tailwind CSS.`
+                },
+                {
+                    role: 'user',
+                    content: enhancedPrompt || ''
+                }
+            ]
+        })
 
-//         const code = codeGenerationResponse.choices[0].message.content || '';
+        const code = codeGenerationResponse.choices[0].message.content || '';
 
-//         if (!code) {
-//             await prisma.conversation.create({
-//                 data: {
-//                     role: 'assistant',
-//                     content: "Unable to generate the code at the moment. Please try again later.",
-//                     projectId: project.id
-//                 }
-//             })
-//             await prisma.user.update({
-//                 where: { id: userId },
-//                 data: {
-//                     credits: { increment: 5 }
-//                 }
-//             })
-//             return;
-//         }
+        if (!code) {
+            await prisma.conversation.create({
+                data: {
+                    role: 'assistant',
+                    content: "Unable to generate the code at the moment. Please try again later.",
+                    projectId: project.id
+                }
+            })
+            await prisma.user.update({
+                where: { id: userId },
+                data: {
+                    credits: { increment: 5 }
+                }
+            })
+            return;
+        }
 
-//         // Create version for the project
+        // Create version for the project
 
-//         const version = await prisma.version.create({
-//             data: {
-//                 code: code.replace(/```[a-z]*\n?/gi, '')
-//                     .replace(/```/g, '')
-//                     .trim(),
-//                 description: 'Initial version',
-//                 projectId: project.id
-//             }
-//         })
+        const version = await prisma.version.create({
+            data: {
+                code: code.replace(/```[a-z]*\n?/gi, '')
+                    .replace(/```/g, '')
+                    .trim(),
+                description: 'Initial version',
+                projectId: project.id
+            }
+        })
 
-//         await prisma.conversation.create({
-//             data: {
-//                 role: 'assistant',
-//                 content: `I've generated your website! You can preview it and request any changes.`,
-//                 projectId: project.id
-//             }
-//         })
+        await prisma.conversation.create({
+            data: {
+                role: 'assistant',
+                content: `I've generated your website! You can preview it and request any changes.`,
+                projectId: project.id
+            }
+        })
 
-//         await prisma.websiteProject.update({
-//             where: { id: project.id },
-//             data: {
-//                 current_code: code.replace(/```[a-z]*\n?/gi, '')
-//                     .replace(/```/g, '')
-//                     .trim(),
-//                 current_version_index: version.id
-//             }
-//         })
+        await prisma.websiteProject.update({
+            where: { id: project.id },
+            data: {
+                current_code: code.replace(/```[a-z]*\n?/gi, '')
+                    .replace(/```/g, '')
+                    .trim(),
+                current_version_index: version.id
+            }
+        })
 
-//     } catch (error: any) {
-//         await prisma.user.update({
-//             where: { id: userId },
-//             data: { credits: { increment: 5 } }
-//         })
-//         console.log(error.code || error.message);
-//         res.status(500).json({ message: 'Internal Server Error' });
-//     }
-// }
+    } catch (error: any) {
+        await prisma.user.update({
+            where: { id: userId },
+            data: { credits: { increment: 5 } }
+        })
+        console.log(error.code || error.message);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
 
 /**
  * CREATE PROJECT (FAST RESPONSE)
- */
-export const createUserProject = async (req: Request, res: Response) => {
-  const userId = req.userId;
 
-  try {
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized user" });
-    }
-
-    const { initial_prompt } = req.body;
-
-    if (!initial_prompt || typeof initial_prompt !== "string") {
-      return res.status(400).json({ message: "Invalid prompt" });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-    });
-
-    if (!user || user.credits < 5) {
-      return res.status(403).json({ message: "Insufficient credits" });
-    }
-
-    // 1️⃣ Create project
-    const project = await prisma.websiteProject.create({
-      data: {
-        name:
-          initial_prompt.length > 50
-            ? initial_prompt.substring(0, 47) + "..."
-            : initial_prompt,
-        initial_prompt,
-        userId,
-      },
-    });
-
-    // 2️⃣ Update user stats
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        totalCreation: { increment: 1 },
-        credits: { decrement: 5 },
-      },
-    });
-
-    // 3️⃣ Save initial conversation
-    await prisma.conversation.create({
-      data: {
-        role: "user",
-        content: initial_prompt,
-        projectId: project.id,
-      },
-    });
-
-    // ✅ SEND RESPONSE ONCE & EXIT
-    res.json({ projectId: project.id });
-
-    // 🚀 Background processing (NO res usage here)
-    process.nextTick(() => {
-      processProjectInBackground(project.id, initial_prompt, userId);
-    });
-
-  } catch (error) {
-    console.error("Create project failed:", error);
-
-    if (!res.headersSent) {
-      return res.status(500).json({ message: "Internal Server Error" });
-    }
-  }
-};
 
 /**
  * BACKGROUND JOB (NO HTTP RESPONSE HERE)
