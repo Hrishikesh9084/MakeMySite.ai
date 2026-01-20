@@ -14,7 +14,7 @@ const port = 3000;
 const corsOptions = {
     origin: process.env.TRUSTED_ORIGINS?.split(',')?.filter(Boolean)?.length
         ? process.env.TRUSTED_ORIGINS.split(',')
-        : ['http://localhost:5173'],
+        : ['https://make-my-site-ai.vercel.app/'],
     credentials: true,
 };
 
