@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Project } from '../types';
 import { Loader, PlusIcon, TrashIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import Background from './Background';
-import { dummyProjects } from '../assets/assets';
 import api from '@/configs/axios';
 import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';

@@ -1,5 +1,4 @@
 import React from 'react'
-import Background from './Background'
 import { appPlans } from '../assets/assets';
 import { authClient } from '@/lib/auth-client';
 import { toast } from 'sonner';

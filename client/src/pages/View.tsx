@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import Background from './Background'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { dummyProjects } from '../assets/assets';
 import { Loader } from 'lucide-react';
 import ProjectPreview from '../componets/ProjectPreview';
 import type { Project } from '../types';
