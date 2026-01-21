@@ -14,7 +14,7 @@ const port = 3000;
 const corsOptions = {
     origin: process.env.TRUSTED_ORIGINS?.split(',')?.filter(Boolean)?.length
         ? process.env.TRUSTED_ORIGINS.split(',')
-        : ['https://make-my-site-ai.vercel.app'],
+        : ['http://localhost:5173'],
     credentials: true,
 };
 
@@ -44,4 +44,7 @@ app.use('/api/user', userRouter);
 app.use('/api/project', projectRouter);
 app.post('/api/stripe', express.raw({ type: 'application/json' }), stripWebhook);
 
-export default app;
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+});
+

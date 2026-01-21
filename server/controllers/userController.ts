@@ -74,7 +74,7 @@ export const createUserProject = async (req: Request, res: Response) => {
             data: { credits: { decrement: 5 } }
         })
 
-        return res.json({ projectId: project.id });
+        res.json({ projectId: project.id });
 
         // Enhance user prompt
 
@@ -174,9 +174,7 @@ export const createUserProject = async (req: Request, res: Response) => {
             })
             await prisma.user.update({
                 where: { id: userId },
-                data: {
-                    credits: { increment: 5 }
-                }
+                data: { credits: { increment: 5 } }
             })
             return;
         }
@@ -221,123 +219,6 @@ export const createUserProject = async (req: Request, res: Response) => {
     }
 }
 
-/**
- * CREATE PROJECT (FAST RESPONSE)
-
-
-/**
- * BACKGROUND JOB (NO HTTP RESPONSE HERE)
- */
-async function processProjectInBackground(
-  projectId: string,
-  initialPrompt: string,
-  userId: string
-) {
-  try {
-    // 1️⃣ Enhance prompt
-    const promptEnhanceResponse = await openai.chat.completions.create({
-      model: "mistralai/devstral-2512:free",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are a prompt enhancement specialist. Expand the user's request into a detailed website prompt.",
-        },
-        { role: "user", content: initialPrompt },
-      ],
-    });
-
-    const enhancedPrompt =
-      promptEnhanceResponse.choices[0].message.content || initialPrompt;
-
-    await prisma.conversation.create({
-      data: {
-        role: "assistant",
-        content: `I've enhanced your prompt:\n\n${enhancedPrompt}`,
-        projectId,
-      },
-    });
-
-    await prisma.conversation.create({
-      data: {
-        role: "assistant",
-        content: "Now generating your website...",
-        projectId,
-      },
-    });
-
-    // 2️⃣ Generate website code
-    const codeResponse = await openai.chat.completions.create({
-      model: "mistralai/devstral-2512:free",
-      messages: [
-        {
-          role: "system",
-          content:
-            "Generate a complete single-page website using Tailwind CSS. Output ONLY valid HTML.",
-        },
-        { role: "user", content: enhancedPrompt },
-      ],
-    });
-
-    const code = codeResponse.choices[0].message.content?.trim();
-
-    if (!code) {
-      throw new Error("Code generation failed");
-    }
-
-    const cleanCode = code
-      .replace(/```[a-z]*\n?/gi, "")
-      .replace(/```/g, "")
-      .trim();
-
-    // 3️⃣ Create version
-    const version = await prisma.version.create({
-      data: {
-        code: cleanCode,
-        description: "Initial version",
-        projectId,
-      },
-    });
-
-    // 4️⃣ Update project
-    await prisma.websiteProject.update({
-      where: { id: projectId },
-      data: {
-        current_code: cleanCode,
-        current_version_index: version.id,
-      },
-    });
-
-    await prisma.conversation.create({
-      data: {
-        role: "assistant",
-        content:
-          "I've generated your website! You can preview it and request changes.",
-        projectId,
-      },
-    });
-
-  } catch (error) {
-    console.error("Background job failed:", error);
-
-    // 🔁 Refund credits safely
-    await prisma.user.update({
-      where: { id: userId },
-      data: { credits: { increment: 5 } },
-    });
-
-    await prisma.conversation.create({
-      data: {
-        role: "assistant",
-        content:
-          "Something went wrong while generating the website. Credits have been refunded.",
-        projectId,
-      },
-    });
-  }
-}
-
-
 // Controller Function to Get A Single User Project
 
 export const getUserProject = async (req: Request, res: Response) => {
@@ -365,7 +246,7 @@ export const getUserProject = async (req: Request, res: Response) => {
             }
         })
 
-       return res.json({ project });
+        res.json({ project });
     } catch (error: any) {
         console.log(error.code || error.message);
         res.status(500).json({ message: 'Internal Server Error' });

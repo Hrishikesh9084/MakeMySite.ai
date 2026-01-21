@@ -24,7 +24,7 @@ export interface Project {
     id: string;
     name: string;
     initial_prompt: string;
-    current_code: string;
+    current_code: string | null;
     createdAt: string;
     updatedAt: string;
     userId: string;
@@ -33,5 +33,5 @@ export interface Project {
     versionId?: string;
     conversation: Message[];
     versions: Version[];
-    current_version_index: string;
+    current_version_index: string | null;
 }

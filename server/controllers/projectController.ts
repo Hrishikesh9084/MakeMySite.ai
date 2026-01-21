@@ -174,7 +174,7 @@ export const makeRevision = async (req: Request, res: Response) => {
             }
         })
         console.log(error.code || error.message);
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 }
 

@@ -57,7 +57,7 @@ model Conversation {
   role      Role
   content   String
   timestamp DateTime @default(now())
-  projectId String 
+  projectId String
 
   // Relations
   project WebsiteProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
