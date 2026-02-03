@@ -6,12 +6,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate()
 
   return (
-      <AuthUIProvider
-        authClient={authClient}
-        navigate={navigate}
-        Link={(props)=><NavLink {...props} to={props.href}/>}
-      >
-          {children}
-      </AuthUIProvider>
-    )
+    <AuthUIProvider
+      authClient={authClient}
+      navigate={navigate}
+      Link={(props) => <NavLink {...props} to={props.href} />}
+    >
+      {children}
+    </AuthUIProvider>
+  )
 }
